@@ -9,7 +9,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@alipay/mychain": "file:alipay-mychain-0.2.27.tgz",
     "aes-js": "^3.1.2",
+    "body-parser": "^1.19.0",
     "express": "^4.17.1",
     "http": "0.0.0"
   },

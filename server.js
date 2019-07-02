@@ -1,16 +1,21 @@
-var http = require("http");
-var express = require("express");
-var app = express();
+const utils = require('./token/ali_token/utils/utils')
+const mutation = require('./token/ali_token/handle/mutation/mutation')
+const {Issue} = require('./token/ali_token/handle/mutation/mutation')
+const http = require("http");
+const express = require("express");
+const app = express();
+const bodyParser = require('body-parser')
 
-app.post('/apply', function(req, res){
-    //你可以在这里处理post请求
-    var userId = req.body.userId
-    var userName = req.body.userName
-    var value = req.body.value
-    var shopId = req.body.shopId
-    var shopName = req.body.shopName
-    var time  = req.body.time
-    res.send("hello world");
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended: false}))
+
+app.post('/', async function(req, res){
+    console.log(req.body)
+    var dataStr = JSON.stringify(req.body)
+    var hashData = await utils.Str2Hex(dataStr)
+    var result = await mutation.NativeDepositData(hashData.hex)
+    console.log(result)
+    res.send(result.txhash);
     res.end();
 });
 
