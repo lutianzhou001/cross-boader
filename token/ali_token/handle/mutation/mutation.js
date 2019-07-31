@@ -12,7 +12,7 @@ function CreateAccount(userId) {
     const privateKey = newKey.privateKey.toString('hex')
     const publicKey = newKey.publicKey.toString('hex')
     env.chain.ctr.CreateAccount({
-      from: 'qinxi',
+      from: 'chiyun',
       to: userId,
       data: {
         recover_key: '0x' + newKey.publicKey.toString('hex'),      // 新账户恢复公钥
@@ -34,7 +34,7 @@ function CreateAccount(userId) {
 function Issue(to, value) {
   return new Promise((resolve, reject) => {
     let myContract = env.chain.ctr.contract(contractName, abi)
-    myContract.transfer(to, value, { from: 'qinxi' }, (err, output, data) => {
+    myContract.transfer(to, value, { from: 'chiyun' }, (err, output, data) => {
       if (err != null) {
         reject(err)
         console.log(data)
@@ -80,8 +80,8 @@ function NativeDepositData(hashData) {
   console.log("begin")
   return new Promise((resolve, reject) => {
     env.chain.ctr.NativeDepositData({
-      from: 'qinxi',
-      to: 'qinxi',
+      from: 'chiyun',
+      to: 'chiyun',
       data: {
         payload: hashData  //存证的数据内容，被序列化为 16 进制
       }
@@ -91,6 +91,7 @@ function NativeDepositData(hashData) {
       } else {
         var txhash = data.txhash
         var blockNumber = data.block_number
+        console.log(data)
         resolve({ txhash, blockNumber })
       }
     })
