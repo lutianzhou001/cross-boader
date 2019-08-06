@@ -2,7 +2,12 @@ const mutation = require('./mutation')
 const utils = require('../../utils/utils')
 
 async function CreateAccount() {
-    var res = await mutation.CreateAccount('xilai')
+    var res = await mutation.CreateAccount('xilaii')
+    console.log(res)
+}
+
+async function Insert(){
+    var res = await mutation.Insert('US','Trump','3')
     console.log(res)
 }
 
@@ -10,6 +15,36 @@ async function Issue() {
     var to = '0xc1437b3992fd172ca55a676e5d6e44593e48ba1784d6597561fdc3a7c9ba78bd'
     var value = 1000
     var res = await mutation.Issue(to, value)
+    console.log(res)
+}
+
+async function updateLeader(){
+    var res = await mutation.updateLeader('China','Trump')
+    console.log(res)
+}
+
+async function compareStrings(){
+    var res = await mutation.compareStrings('China1','China1')
+    console.log(res)
+}
+
+async function Helloworld(){
+    var res = await mutation.Helloworld('hereismymessage')
+    console.log(res)
+}
+
+async function getCountry(){
+    var res = await mutation.getCountry('China')
+    console.log(res)
+}
+ 
+async function deleteCountry(){
+    var res = await mutation.deleteCountry('China')
+    console.log(res)
+}
+
+async function getTotalCountries(){
+    var res = await mutation.getTotalCountries()
     console.log(res)
 }
 
@@ -35,6 +70,12 @@ async function NativeDepositData() {
 }
 
 //CreateAccount()
-//Issue()
+//Insert()
 //Transfer()
-NativeDepositData()
+//NativeDepositData()
+//updateLeader()
+//getCountry()
+getTotalCountries()
+//Helloworld()
+//compareStrings()
+//deleteCountry()

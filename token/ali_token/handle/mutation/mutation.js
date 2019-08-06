@@ -3,7 +3,11 @@ const env = require("../env/env")
 const fs = require('fs')
 const path = require('path')
 const abi = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../contracts/MyToken_sol_MyToken.abi'), String))
+const abicurd = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../contracts/CRUDApp_sol_CrudApp.abi'), String))
 const contractName = 'MyTokenv2.0.3'
+const contractNamecurd = 'CRUDApp5'
+
+
 // 使用新创建的key创建账户
 
 function CreateAccount(userId) {
@@ -27,6 +31,100 @@ function CreateAccount(userId) {
         privateKey,
         publicKey
       })
+    })
+  })
+}
+
+
+function Insert(countryName,leader,population){
+  return new Promise((resolve,reject) => {
+    let myContract = env.chain.ctr.contract(contractNamecurd,abicurd)
+    myContract.insert(countryName,leader,population,{from:'chiyun'},(err,output,data) =>{
+      if (err != null){
+        reject(err)
+        console.log(data)
+       } else {
+          var txhash = data.txhash
+          resolve ({txhash,output})
+}
+})
+})
+}
+
+
+function updateLeader(countryName,newLeader) {
+  return new Promise((resolve, reject) => {
+    let myContract = env.chain.ctr.contract(contractNamecurd, abicurd)
+    myContract.updateLeader(countryName,newLeader,{ from: 'chiyun' }, (err, output, data) => {
+      if (err != null) {
+        reject(err)
+        console.log(data)
+      } else {
+        var txhash = data.txhash
+        resolve({ txhash, output })
+      }
+    })
+  })
+}
+
+
+function getTotalCountries() {
+  return new Promise((resolve, reject) => {
+    let myContract = env.chain.ctr.contract(contractNamecurd, abicurd)
+    myContract.getTotalCountries({ from: 'chiyun' }, (err, output, data) => {
+      if (err != null) {
+        reject(err)
+        console.log(data)
+      } else {
+        var txhash = data.txhash
+        resolve({ txhash, output })
+      }
+    })
+  })
+}
+
+function getCountry(countryName) {
+  return new Promise((resolve, reject) => {
+    let myContract = env.chain.ctr.contract(contractNamecurd, abicurd)
+    myContract.getCountry(countryName,{ from: 'chiyun' }, (err, output, data) => {
+      if (err != null) {
+        reject(err)
+        console.log(data)
+      } else {
+        var txhash = data.txhash
+        resolve({ txhash, output })
+      }
+    })
+  })
+}
+
+
+function deleteCountry(countryName) {
+  return new Promise((resolve, reject) => {
+    let myContract = env.chain.ctr.contract(contractNamecurd, abicurd)
+    myContract.deleteCountry(countryName,{ from: 'chiyun' }, (err, output, data) => {
+      if (err != null) {
+        reject(err)
+        console.log(data)
+      } else {
+        var txhash = data.txhash
+        resolve({ txhash, output })
+      }
+    })
+  })
+}
+
+function compareStrings(country1Name,country2Name) {
+  return new Promise((resolve, reject) => {
+    let myContract = env.chain.ctr.contract(contractNamecurd, abicurd)
+    myContract.compareStrings(country1Name,country2Name,{ from: 'chiyun' }, (err, output, data) => {
+      if (err != null) {
+        reject(err)
+        console.log(data)
+      } else {
+        var txhash = data.txhash
+        resolve({ txhash, output })
+      }
     })
   })
 }
@@ -103,7 +201,13 @@ module.exports = {
   CreateAccount,
   Issue,
   Transfer,
-  NativeDepositData
+  NativeDepositData,
+  Insert,
+  updateLeader,
+  getCountry,
+  getTotalCountries,
+  deleteCountry,
+  compareStrings
 }
 
 
