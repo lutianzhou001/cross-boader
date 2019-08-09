@@ -1,6 +1,7 @@
 const utils = require('./token/ali_token/utils/utils')
 const mutation = require('./token/ali_token/handle/mutation/mutation')
-const createContract = require('./token/ali_token/handle/modify/createContract')
+const contracts = require('./token/ali_token/handle/modify/contracts')
+const deploy =  require('./token/ali_token/handle/modify/deployContract')
 const {Issue} = require('./token/ali_token/handle/mutation/mutation')
 const http = require("http");
 const express = require("express");
@@ -23,20 +24,28 @@ app.post('/', async function(req, res){
 });
 
 app.post('/contracts/createContract', async function(req, res){
-    console.log("aaa")
+    console.log("createContract")
     console.log(req.body)
     var contract_name = req.body.contract_name
     var content = JSON.stringify(req.body.content)
     var created = Date.now().toString()
     console.log(created)
-    var result = await createContract.createContract(res,contract_name,content,created)
+    var result = await contracts.createContract(res,contract_name,content,created)
 });
 
+app.get('/contracts/queryContracts',async function(req,res){
+    console.log("queryContracts")
+    console.log(req.body)
+    var result = await contracts.queryContracts(res)
+})
 
 
-
-
-
+app.post('/contracts/deployContract', async function(req, res){
+    console.log("deployContract")
+    console.log(req.body)
+    var id = req.body.id
+    var result = await deploy.deployContract(res,id)
+});
 
 
 http.createServer(app).listen(3000, function(){

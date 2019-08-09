@@ -1,9 +1,6 @@
 const mysql =  require('mysql')
 
 
-
-async function createContract(res,contract_name,content,created){
-
 let connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
@@ -12,17 +9,15 @@ let connection = mysql.createConnection({
     port: '3399'
 })
 
-
 connection.connect(function (err) {
     if (err) {
-        console.error('connect failed')
+        console.error(err)
         return;
     }
     console.log('连接成功 id ' + connection.threadId);
 });
 
-
-console.log("created is ..."+ created)
+async function createContract(res,contract_name,content,created){
 
 connection.query('INSERT INTO allcontracts(contract_name,content,type,created) VALUES(?,?,?,?)', [contract_name,content,'CURD',created], (err, results) => {
                             if (err) {
@@ -34,10 +29,31 @@ connection.query('INSERT INTO allcontracts(contract_name,content,type,created) V
 
 }
 
+
+async function queryContracts(res){
+connection.query('SELECT * FROM allcontracts', async(err,results,fields) => {if (err){console.log(err)} else {
+
+var response  = []
+
+for (i=0;i<results.length;i++)
+{
+  var obj = {}
+  obj.id = results[i].contractid
+  obj.name = results[i].contract_name
+  obj.type = results[i].type
+  obj.created = results[i].created
+  console.log(obj)
+  response.push(obj)
+}
+
+res.status(200).json(response).end()
+}}) 
+}
+
 module.exports = {
 
-createContract
-
+createContract,
+queryContracts
 }
 
 
