@@ -1,6 +1,6 @@
 const utils = require('./token/ali_token/utils/utils')
 const mutation = require('./token/ali_token/handle/mutation/mutation')
-const models = require('./token/ali_token/handle/mutation/models')
+//const models = require('./token/ali_token/handle/mutation/models')
 const contracts = require('./token/ali_token/handle/modify/contracts')
 const deploy =  require('./token/ali_token/handle/modify/deployContract')
 const {Issue} = require('./token/ali_token/handle/mutation/mutation')
@@ -49,7 +49,7 @@ app.post('/contracts/deployContract', async function(req, res){
     var result = await deploy.deployContract(res,id)
 });
 
-
+/*
 app.post('api/models/saveData',async function(req,res){
     console.log("saveData")
     console.log(req.body)
@@ -61,7 +61,7 @@ app.get('api/models/queryData',async function(req,res){
     console.log(req.body)
     var result = await models.queryData(res,req.body.contract_name,req.body.content)
 })
-
+*/
 
 http.createServer(app).listen(3000, function(){
     console.log("server start");

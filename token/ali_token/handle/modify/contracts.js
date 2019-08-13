@@ -32,11 +32,23 @@ connection.query('INSERT INTO allcontracts(contract_name,content,type,created) V
 async function createTable(res,contract_name,content){
 
 
-connection.query('CREATE TABLE ...')  
+console.log("content is ..."+content)
+let create = `create table if not exists `+ contract_name + `(id int primary key auto_increment ,`
+for (var i= 0; i<content.length-1 ;i++){
+    create = create + " "+ content[i].name + " " + content[i].type + " not null, "
+    console.log(create)
+ }
 
+create = create + " "+ content[i].name + " " + content[i].type + " not null "
+create = create + ") ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;"
+console.log(create)
 
-let create = `create table if not exists` + contract_name + ``
+connection.query(create,function(err,results,fields){
+  if (err){
+    console.log(err.message)
+}
 
+})
 
 }
 
@@ -65,7 +77,8 @@ res.status(200).json(response).end()
 module.exports = {
 
 createContract,
-queryContracts
+queryContracts,
+createTable
 }
 
 
