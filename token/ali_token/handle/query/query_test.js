@@ -13,7 +13,7 @@ async function QueryBalanceOf(){
 }
 
 async function QueryAccount(){
-    var userId = 'xiaobai'
+    var userId = 'xilaii53'
     var res = await query.QueryAccount(userId)
     console.log(res)
 }
@@ -28,5 +28,5 @@ async function QueryTransaction(){
 
 //QueryTotalSupply()
 //QueryBalanceOf()
-//QueryAccount()
-QueryTransaction()
+QueryAccount()
+//QueryTransaction()

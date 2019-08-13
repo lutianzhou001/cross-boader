@@ -29,6 +29,18 @@ connection.query('INSERT INTO allcontracts(contract_name,content,type,created) V
 
 }
 
+async function createTable(res,contract_name,content){
+
+
+connection.query('CREATE TABLE ...')  
+
+
+let create = `create table if not exists` + contract_name + ``
+
+
+}
+
+
 
 async function queryContracts(res){
 connection.query('SELECT * FROM allcontracts', async(err,results,fields) => {if (err){console.log(err)} else {

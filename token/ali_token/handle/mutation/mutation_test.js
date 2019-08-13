@@ -2,7 +2,7 @@ const mutation = require('./mutation')
 const utils = require('../../utils/utils')
 
 async function CreateAccount() {
-    var res = await mutation.CreateAccount('xilaii')
+    var res = await mutation.CreateAccount('xilaii53')
     console.log(res)
 }
 
@@ -69,13 +69,13 @@ async function NativeDepositData() {
     console.log(res)
 }
 
-//CreateAccount()
+CreateAccount()
 //Insert()
 //Transfer()
 //NativeDepositData()
 //updateLeader()
 //getCountry()
-getTotalCountries()
+//getTotalCountries()
 //Helloworld()
 //compareStrings()
 //deleteCountry()
