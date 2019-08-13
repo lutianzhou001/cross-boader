@@ -9,7 +9,8 @@ let connection = mysql.createConnection({
   port: '3399'
 })
 
-async function saveData(res, contract_name, content) {
+async function saveData(response, contract_name, content) {
+  console.log(content)
   let queryTable = 'show full columns from ' + contract_name
   connection.query(queryTable, function (err, data) {
     if (err) { console.log(err) } else {
@@ -27,18 +28,17 @@ async function saveData(res, contract_name, content) {
       }
       insert_columns = insert_columns + '?'
       var obj = []
-      for (i = 0; i < content.length; i++) {
-        for (var key in content[i]) {
-          obj.push(content[i][key])
-        }
+      for (var key in content) {
+          obj.push(content[key])
       }
-      console.log(obj)
       let saveData = 'INSERT INTO ' + contract_name + '(' + data_columns + ') VALUES (' + insert_columns + ')'
+      console.log(saveData)
       connection.query(saveData, obj, (err, res) => {
         if (err) {
           console.log(err)
         }
         console.log("success")
+        response.status(200).json({"success": 1 ,"errMessage":"" , "txHash":"0x11579857197520175015701725017047123095" , "blockNumber":"213011011","key":"0x172105723057350175031422"}).end()
       })
     }
   })
