@@ -23,7 +23,7 @@ app.post('/', async function(req, res){
     res.end();
 });
 
-app.post('/contracts/createContract', async function(req, res){
+app.post('/api/contracts/createContract', async function(req, res){
     console.log("createContract")
     var contract_name = req.body.contract_name
     var content = JSON.stringify(req.body.content)
@@ -33,13 +33,13 @@ app.post('/contracts/createContract', async function(req, res){
     var createTable = await contracts.createTable(res,req.body.contract_name,req.body.content)
 });
 
-app.get('/contracts/queryContracts',async function(req,res){
+app.get('/api/contracts/queryContracts',async function(req,res){
     console.log("queryContracts")
     var result = await contracts.queryContracts(res)
 })
 
 
-app.post('/contracts/deployContract', async function(req, res){
+app.post('/api/contracts/deployContract', async function(req, res){
     console.log("deployContract")
     var id = req.body.id
     var result = await deploy.deployContract(res,id)
