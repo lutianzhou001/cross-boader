@@ -28,7 +28,6 @@ app.post('/api/contracts/createContract', async function(req, res){
     var contract_name = req.body.contract_name
     var content = JSON.stringify(req.body.content)
     var created = Date.now().toString()
-    console.log(created)
     var result = await contracts.createContract(res,contract_name,content,created)
     var createTable = await contracts.createTable(res,req.body.contract_name,req.body.content)
 });

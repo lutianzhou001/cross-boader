@@ -10,7 +10,6 @@ let connection = mysql.createConnection({
 })
 
 async function saveData(response, contract_name, content) {
-  console.log(content)
   let queryTable = 'show full columns from ' + contract_name
   connection.query(queryTable, function (err, data) {
     if (err) { console.log(err) } else {
@@ -32,7 +31,6 @@ async function saveData(response, contract_name, content) {
           obj.push(content[key])
       }
       let saveData = 'INSERT INTO ' + contract_name + '(' + data_columns + ') VALUES (' + insert_columns + ')'
-      console.log(saveData)
       connection.query(saveData, obj, (err, res) => {
         if (err) {
           console.log(err)
@@ -47,7 +45,6 @@ async function saveData(response, contract_name, content) {
 
 
 async function queryData(response, contract_name, filter) {
-  console.log(contract_name)
   let queryData = 'SELECT * FROM ' + contract_name
   connection.query(queryData,async (err,results,fields) =>{
   var obj = []

@@ -34,11 +34,9 @@ async function createTable(res,contract_name,content){
 let create = `create table if not exists `+ contract_name + `(id int primary key auto_increment ,`
 for (var i= 0; i<content.length ;i++){
     create = create + " "+ content[i].name + " " + content[i].type + " not null, "
-    console.log(create)
  }
 
 create = create + "blockNumber varchar(40), txHash varchar(100)  ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;"
-console.log(create)
 
 connection.query(create,function(err,results,fields){
   if (err){
@@ -63,7 +61,6 @@ for (i=0;i<results.length;i++)
   obj.name = results[i].contract_name
   obj.type = results[i].type
   obj.created = results[i].created
-  console.log(obj)
   response.push(obj)
 }
 
