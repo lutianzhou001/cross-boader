@@ -31,16 +31,13 @@ connection.query('INSERT INTO allcontracts(contract_name,content,type,created) V
 
 async function createTable(res,contract_name,content){
 
-
-console.log("content is ..."+content)
 let create = `create table if not exists `+ contract_name + `(id int primary key auto_increment ,`
-for (var i= 0; i<content.length-1 ;i++){
+for (var i= 0; i<content.length ;i++){
     create = create + " "+ content[i].name + " " + content[i].type + " not null, "
     console.log(create)
  }
 
-create = create + " "+ content[i].name + " " + content[i].type + " not null "
-create = create + ") ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;"
+create = create + "blockNumber varchar(40), txHash varchar(100)  ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;"
 console.log(create)
 
 connection.query(create,function(err,results,fields){

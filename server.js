@@ -51,13 +51,12 @@ app.post('/api/models/saveData',async function(req,res){
     var result = await model.saveData(res,req.body.contract_name,req.body.content)
 });
 
-/*
-app.get('api/models/queryData',async function(req,res){
+
+app.get('/api/models/queryData',async function(req,res){
     console.log("queryData")
-    console.log(req.body)
-    var result = await models.queryData(res,req.body.contract_name,req.body.content)
-})
-*/
+    var result = await model.queryData(res,req.body.contract_name,req.body.filter)
+});
+
 
 http.createServer(app).listen(3000, function(){
     console.log("server start");

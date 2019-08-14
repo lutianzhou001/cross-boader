@@ -17,13 +17,13 @@ async function saveData(response, contract_name, content) {
 
       var data_columns = ''
 
-      for (i = 1; i < data.length - 1; i++) {
+      for (i = 1; i < data.length - 3; i++) {
         data_columns = data_columns + data[i].Field + ','
       }
       data_columns = data_columns + data[i].Field
 
       var insert_columns = ''
-      for (i = 1; i < data.length - 1; i++) {
+      for (i = 1; i < data.length - 3; i++) {
         insert_columns = insert_columns + '?' + ','
       }
       insert_columns = insert_columns + '?'
@@ -46,12 +46,25 @@ async function saveData(response, contract_name, content) {
 
 
 
-async function quereyData(res, req) {
-
+async function queryData(response, contract_name, filter) {
+  console.log(contract_name)
+  let queryData = 'SELECT * FROM ' + contract_name
+  connection.query(queryData,async (err,results,fields) =>{
+  var obj = []
+  for (i=0;i<results.length;i++){
+  var flag = 1
+  for (var key in filter) {
+    if (results[i][key] != filter[key]) {flag = 0;break}    
+  }
+  if (flag == 1){
+  obj.push(results[i])}
+  }
+  response.status(200).json({"success":1,"errMessage":"","contract_name":contract_name,"content":obj}).end()
+  })
 }
 
 
 module.exports = {
   saveData,
-  quereyData
+  queryData
 }
