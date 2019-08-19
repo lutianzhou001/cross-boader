@@ -24,7 +24,7 @@ async function createContract(res, contract_name, content, created) {
       console.log(err);
     }
     console.log("success")
-    connection.query('SELCT LAST_INSERT_ID()', function (err, data) { if (err) { res.status(200).json({ success: 0, id: 0 }).end(); } else { res.status(200).json({ success: 1, id: data[0]['LAST_INSERT_ID()'] }).end() } })
+    connection.query('select * from allcontracts order by contractid desc LIMIT 1', function (err, data) { if (err) { res.status(200).json({ success: 0, id: 0 }).end(); } else { res.status(200).json({ success: 1, id: data[0]['contractid'] }).end() } })
   })
 
 }
