@@ -1,4 +1,5 @@
 const mysql = require('mysql')
+const onChain = require('../../../../fisco/nodejs-sdk/packages/cli/onChain')
 
 
 let connection = mysql.createConnection({
@@ -30,6 +31,8 @@ async function createContract(res, contract_name, content, created) {
 }
 
 async function createTable(res, contract_name, content) {
+  
+  // first we will add in a sql
   let create = `create table if not exists ` + contract_name + `(id int primary key auto_increment ,`
   for (var i = 0; i < content.length; i++) {
     create = create + " " + content[i].name + " " + content[i].type + " not null, "
@@ -42,7 +45,10 @@ async function createTable(res, contract_name, content) {
 
   })
 
+  // next we will add onChain
+  await onChain.createTable(content)
 }
+
 
 async function queryContracts(res) {
   connection.query('SELECT * FROM allcontracts', async (err, results, fields) => {
