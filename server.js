@@ -9,6 +9,7 @@ const express = require("express");
 const app = express();
 const bodyParser = require('body-parser')
 const cors = require('cors')
+const onChain = require('./fisco/nodejs-sdk/packages/cli/onChain')
 
 app.use(cors())
 app.use(bodyParser.json())
@@ -29,7 +30,8 @@ app.post('/api/contracts/createContract', async function(req, res){
     var content = JSON.stringify(req.body.content)
     var created = Date.now().toString()
     var result = await contracts.createContract(res,contract_name,content,created)
-    var createTable = await contracts.createTable(res,req.body.contract_name,req.body.content)
+    //createTable on the chain
+    var createTable = await onChain.createTable(res,req.body.contract_name,req.body.content)
 });
 
 app.get('/api/contracts/queryContracts',async function(req,res){

@@ -1,5 +1,5 @@
 const mysql = require('mysql')
-
+const onChain = require('../../../../fisco/nodejs-sdk/packages/cli/onChain')
 
 let connection = mysql.createConnection({
   host: 'localhost',
@@ -11,7 +11,7 @@ let connection = mysql.createConnection({
 
 async function saveData(response, contract_name, content) {
   let queryTable = 'show full columns from ' + contract_name
-  connection.query(queryTable, function (err, data) {
+  connection.query(queryTable, async function (err, data) {
     if (err) { console.log(err) } else {
       var data_columns = ''
       for (i = 1; i < data.length - 3; i++) {
@@ -35,6 +35,7 @@ async function saveData(response, contract_name, content) {
         console.log("success")
         response.status(200).json({ "success": 1, "errMessage": "", "txHash": "0x11579857197520175015701725017047123095", "blockNumber": "213011011", "key": "0x172105723057350175031422" }).end()
       })
+      await onChain.saveData(contract_name, content, obj)  
     }
   })
 }
@@ -56,6 +57,7 @@ async function queryData(response, contract_name, filter) {
     }
     response.status(200).json({ "success": 1, "errMessage": "", "contract_name": contract_name, "content": obj }).end()
   })
+  await onChain.queryData(contract_name, filter)
 }
 
 
