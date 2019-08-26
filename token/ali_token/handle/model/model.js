@@ -15,64 +15,65 @@ const connection = coMysql(pool)
 async function saveData(response, contract_name, content) {
 
   var keys = []
-  for (var key in content){
-     keys.push(key)
-    }
+  for (var key in content) {
+    keys.push(key)
+  }
 
   var values = []
-  for (var key in content){
-     values.push(content[key])
-    }
+  for (var key in content) {
+    values.push(content[key])
+  }
 
-  var txHash= await onChain.insertOnChain(1,"orderId001",keys,values)
+  var txHash = await onChain.insertOnChain(1, "orderId001", keys, values)
 
-  var promiseSaveData = new Promise(function(resolve,reject){
-  let queryTable = 'show full columns from ' + contract_name
-  connection.query(queryTable, function (err, data) {
-    if (err) { console.log(err) } else {
-      var data_columns = ''
-      for (i = 1; i < data.length - 3; i++) {
-        data_columns = data_columns + data[i].Field + ','
-      }
-      data_columns = data_columns + data[i].Field + ',txHash'
-      var insert_columns = ''
-      for (i = 1; i < data.length - 3; i++) {
-        insert_columns = insert_columns + '?' + ','
-      }
-      insert_columns = insert_columns + '?,?'
-      var obj = []
-      for (var key in content) {
-        obj.push(content[key])
-      }
-      obj.push(txHash)
-      let saveData = 'INSERT INTO ' + contract_name + '(' + data_columns + ') VALUES (' + insert_columns + ')'
-      connection.query(saveData, obj, (err, res) => {
-        if (err) {
-          console.log(err)
+  var promiseSaveData = new Promise(function (resolve, reject) {
+    let queryTable = 'show full columns from ' + contract_name
+    connection.query(queryTable, function (err, data) {
+      if (err) { console.log(err) } else {
+        var data_columns = ''
+        for (i = 1; i < data.length - 3; i++) {
+          data_columns = data_columns + data[i].Field + ','
         }
-        console.log("success")
-        resolve({ "success": 1, "errMessage": "", "txHash": txHash})
-      })
-    }
+        data_columns = data_columns + data[i].Field + ',txHash'
+        var insert_columns = ''
+        for (i = 1; i < data.length - 3; i++) {
+          insert_columns = insert_columns + '?' + ','
+        }
+        insert_columns = insert_columns + '?,?'
+        var obj = []
+        for (var key in content) {
+          obj.push(content[key])
+        }
+        obj.push(txHash)
+        let saveData = 'INSERT INTO ' + contract_name + '(' + data_columns + ') VALUES (' + insert_columns + ')'
+        connection.query(saveData, obj, (err, res) => {
+          if (err) {
+            console.log(err)
+          }
+          console.log("success")
+          resolve({ "success": 1, "errMessage": "", "txHash": txHash })
+        })
+      }
+    })
   })
-})
-  var res = await promiseSaveData.then(function(value){return value})
+  var res = await promiseSaveData.then(function (value) { return value })
   return res
 }
 
 
-async function batchSaveData(response,contract_name,content){
-     var obj = []
-     for (j = 0; j < content.length; j++){
-     var res = await saveData(response,contract_name,content[j])
-     obj.push(res)
+async function batchSaveData(response, contract_name, content) {
+  var obj = []
+  for (j = 0; j < content.length; j++) {
+    var res = await saveData(response, contract_name, content[j])
+    obj.push(res)
 
   }
-     if (obj.length == 1) {
-        response.status(200).json(obj).end()}
-       else {
-        response.status(200).json({"success":obj.length,"errMessage" : "" }).end()
-    }
+  if (obj.length == 1) {
+    response.status(200).json(obj).end()
+  }
+  else {
+    response.status(200).json({ "success": obj.length, "errMessage": "" }).end()
+  }
 }
 
 
