@@ -1,7 +1,7 @@
 const mysql = require('mysql')
+const coMysql = require('co-mysql')
 
-
-let connection = mysql.createConnection({
+let pool = mysql.createConnection({
   host: 'localhost',
   user: 'root',
   password: '123456',
@@ -9,9 +9,11 @@ let connection = mysql.createConnection({
   port: '3399'
 })
 
+const connection = coMysql(pool)
+
 async function saveData(response, contract_name, content) {
   let queryTable = 'show full columns from ' + contract_name
-  connection.query(queryTable, function (err, data) {
+  await connection.query(queryTable, function (err, data) {
     if (err) { console.log(err) } else {
       var data_columns = ''
       for (i = 1; i < data.length - 3; i++) {
@@ -27,6 +29,7 @@ async function saveData(response, contract_name, content) {
       for (var key in content) {
         obj.push(content[key])
       }
+      console.log(obj)
       let saveData = 'INSERT INTO ' + contract_name + '(' + data_columns + ') VALUES (' + insert_columns + ')'
       connection.query(saveData, obj, (err, res) => {
         if (err) {
@@ -39,6 +42,16 @@ async function saveData(response, contract_name, content) {
   })
 }
 
+
+async function batchSaveData(response,contract_name,content){
+  for (j = 0; j < content.length; j++){
+     (function(j){
+     console.log(j)
+     console.log(content[j])
+     saveData(response,contract_name,content[j])
+     })(j)
+}
+}
 
 
 async function queryData(response, contract_name, filter) {
@@ -61,5 +74,6 @@ async function queryData(response, contract_name, filter) {
 
 module.exports = {
   saveData,
-  queryData
+  queryData,
+  batchSaveData
 }

@@ -41,7 +41,6 @@ async function createTable(res, contract_name, content) {
     }
 
   })
-
 }
 
 async function queryContracts(res) {

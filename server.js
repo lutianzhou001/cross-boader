@@ -47,7 +47,11 @@ app.post('/api/contracts/deployContract', async function(req, res){
 
 app.post('/api/models/saveData',async function(req,res){
     console.log("saveData")
-    var result = await model.saveData(res,req.body.contract_name,req.body.content)
+    if (req.body.content.length == 1){
+    var result = await model.saveData(res,req.body.contract_name,req.body.content)}
+    else {
+    var result = await model.batchSaveData(res,req.body.contract_name,req.body.content) 
+    }
 });
 
 
