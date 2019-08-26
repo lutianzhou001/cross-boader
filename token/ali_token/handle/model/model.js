@@ -1,5 +1,6 @@
 const mysql = require('mysql')
 const coMysql = require('co-mysql')
+const onChain = require('../../../../truffle/onChainFunction/onChainFunction')
 
 let pool = mysql.createConnection({
   host: 'localhost',
@@ -12,45 +13,66 @@ let pool = mysql.createConnection({
 const connection = coMysql(pool)
 
 async function saveData(response, contract_name, content) {
+
+  var keys = []
+  for (var key in content){
+     keys.push(key)
+    }
+
+  var values = []
+  for (var key in content){
+     values.push(content[key])
+    }
+
+  var txHash= await onChain.insertOnChain(1,"orderId001",keys,values)
+
+  var promiseSaveData = new Promise(function(resolve,reject){
   let queryTable = 'show full columns from ' + contract_name
-  await connection.query(queryTable, function (err, data) {
+  connection.query(queryTable, function (err, data) {
     if (err) { console.log(err) } else {
       var data_columns = ''
       for (i = 1; i < data.length - 3; i++) {
         data_columns = data_columns + data[i].Field + ','
       }
-      data_columns = data_columns + data[i].Field
+      data_columns = data_columns + data[i].Field + ',txHash'
       var insert_columns = ''
       for (i = 1; i < data.length - 3; i++) {
         insert_columns = insert_columns + '?' + ','
       }
-      insert_columns = insert_columns + '?'
+      insert_columns = insert_columns + '?,?'
       var obj = []
       for (var key in content) {
         obj.push(content[key])
       }
-      console.log(obj)
+      obj.push(txHash)
       let saveData = 'INSERT INTO ' + contract_name + '(' + data_columns + ') VALUES (' + insert_columns + ')'
       connection.query(saveData, obj, (err, res) => {
         if (err) {
           console.log(err)
         }
         console.log("success")
-        response.status(200).json({ "success": 1, "errMessage": "", "txHash": "0x11579857197520175015701725017047123095", "blockNumber": "213011011", "key": "0x172105723057350175031422" }).end()
+        resolve({ "success": 1, "errMessage": "", "txHash": txHash})
       })
     }
   })
+})
+  var res = await promiseSaveData.then(function(value){return value})
+  return res
 }
 
 
 async function batchSaveData(response,contract_name,content){
-  for (j = 0; j < content.length; j++){
-     (function(j){
-     console.log(j)
-     console.log(content[j])
-     saveData(response,contract_name,content[j])
-     })(j)
-}
+     var obj = []
+     for (j = 0; j < content.length; j++){
+     var res = await saveData(response,contract_name,content[j])
+     obj.push(res)
+
+  }
+     if (obj.length == 1) {
+        response.status(200).json(obj).end()}
+       else {
+        response.status(200).json({"success":obj.length,"errMessage" : "" }).end()
+    }
 }
 
 
