@@ -95,8 +95,20 @@ async function queryTotal() {
 
 async function queryData(response, contract_name, filter) {
 
-  var res = await onChain.queryOnChain(1, filter.OrderId)
+  var res = await onChain.queryOnChain(1, filter.orderId)
   console.log("res is ..." + JSON.stringify(res))
+  var arr = res.split(",")
+  var obj = {}
+  for ( i = 0 ; i< arr.length / 2 ; i++ ){
+  obj[arr[0]] = arr[3]
+}
+  content = []
+  content.push(obj)
+
+
+  response.status(200).json({"success" : 1, content:content }).end()
+ 
+
   /*
   let queryData = 'SELECT * FROM ' + contract_name
   connection.query(queryData, async (err, results, fields) => {

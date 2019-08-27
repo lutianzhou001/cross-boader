@@ -79,7 +79,7 @@ contract International {
                 values = value;
             }else {
                 keys = StringTools._strConcat(keys,key);
-                values = StringTools._strConcat(values,values);
+                values = StringTools._strConcat(values,value);
             }
         }
         //return values;
