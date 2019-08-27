@@ -12,7 +12,7 @@ let pool = mysql.createConnection({
 
 const connection = coMysql(pool)
 
-async function saveData(response, contract_name, content) {
+async function saveData(response, contract_name, content, orderId) {
 
   var keys = []
   for (var key in content) {
@@ -24,7 +24,19 @@ async function saveData(response, contract_name, content) {
     values.push(content[key])
   }
 
-  var txHash = await onChain.insertOnChain(1, "orderId001", keys, values)
+
+  var promiseOnChainSave = new Promise(function(resolve,reject){
+
+
+
+  connection.query('select * from ' + contract_name +' order by id desc LIMIT 1', async function(err,data){
+      console.log(data)
+      var result = await onChain.insertOnChain(data[0]['id']+1,orderId,keys,values)
+      resolve(result)
+     })
+})
+
+var txHash = await promiseOnChainSave.then(function(value){return value})
 
   var promiseSaveData = new Promise(function (resolve, reject) {
     let queryTable = 'show full columns from ' + contract_name
@@ -64,7 +76,7 @@ async function saveData(response, contract_name, content) {
 async function batchSaveData(response, contract_name, content) {
   var obj = []
   for (j = 0; j < content.length; j++) {
-    var res = await saveData(response, contract_name, content[j])
+    var res = await saveData(response, contract_name, content[j],content[j].orderId)
     obj.push(res)
 
   }
@@ -76,8 +88,17 @@ async function batchSaveData(response, contract_name, content) {
   }
 }
 
+async function queryTotal(){
+  var res = await onChain.queryTotalonChain()
+  return res
+}
+
 
 async function queryData(response, contract_name, filter) {
+
+  var res = await onChain.queryOnChain(1,filter.OrderId)
+  console.log("res is ..." + JSON.stringify(res))
+  /*
   let queryData = 'SELECT * FROM ' + contract_name
   connection.query(queryData, async (err, results, fields) => {
     var obj = []
@@ -92,11 +113,13 @@ async function queryData(response, contract_name, filter) {
     }
     response.status(200).json({ "success": 1, "errMessage": "", "contract_name": contract_name, "content": obj }).end()
   })
+  */
 }
 
 
 module.exports = {
   saveData,
   queryData,
-  batchSaveData
+  batchSaveData,
+  queryTotal
 }
