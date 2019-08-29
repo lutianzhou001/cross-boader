@@ -30,12 +30,17 @@ async function saveData(response, contract_name, content, orderId) {
 
 
     connection.query('select * from ' + contract_name + ' order by id desc LIMIT 1', async function (err, data) {
+      if (data.length){
       var result = await onChain.insertOnChain(data[0]['id'] + 1, orderId, keys, values)
       resolve(result)
+      } else {
+      var result = await onChain.insertOnChain(1,orderId,keys,values)
+      resolve(result)
+      }
     })
   })
 
-  var txHash = await promiseOnChainSave.then(function (value) { return value })
+  var onChainData = await promiseOnChainSave.then(function (value) { return value })
 
   var promiseSaveData = new Promise(function (resolve, reject) {
     let queryTable = 'show full columns from ' + contract_name
@@ -45,24 +50,25 @@ async function saveData(response, contract_name, content, orderId) {
         for (i = 1; i < data.length - 3; i++) {
           data_columns = data_columns + data[i].Field + ','
         }
-        data_columns = data_columns + data[i].Field + ',txHash'
+        data_columns = data_columns + data[i].Field + ',blockNumber,txHash'
         var insert_columns = ''
         for (i = 1; i < data.length - 3; i++) {
           insert_columns = insert_columns + '?' + ','
         }
-        insert_columns = insert_columns + '?,?'
+        insert_columns = insert_columns + '?,?,?'
         var obj = []
         for (var key in content) {
           obj.push(content[key])
         }
-        obj.push(txHash)
+        obj.push(onChainData.blockNumber)
+        obj.push(onChainData.txHash)
         let saveData = 'INSERT INTO ' + contract_name + '(' + data_columns + ') VALUES (' + insert_columns + ')'
         connection.query(saveData, obj, (err, res) => {
           if (err) {
             console.log(err)
           }
           console.log("success")
-          resolve({ "success": 1, "errMessage": "", "txHash": txHash })
+          resolve({ "success": 1, "errMessage": "", "blockNumber":onChainData.blockNumber ,"txHash": onChainData.txHash })
         })
       }
     })
@@ -80,7 +86,7 @@ async function batchSaveData(response, contract_name, content) {
 
   }
   if (obj.length == 1) {
-    response.status(200).json(obj).end()
+    response.status(200).json(obj[0]).end()
   }
   else {
     response.status(200).json({ "success": obj.length, "errMessage": "" }).end()
@@ -100,13 +106,11 @@ async function queryData(response, contract_name, filter) {
   var arr = res.split(",")
   var obj = {}
   for ( i = 0 ; i< arr.length / 2 ; i++ ){
-  obj[arr[0]] = arr[3]
+  obj[arr[i]] = arr[ i + arr.length / 2]
 }
   content = []
   content.push(obj)
-
-
-  response.status(200).json({"success" : 1, content:content }).end()
+  response.status(200).json({"success":1, contract_name : contract_name,content:content }).end()
  
 
   /*

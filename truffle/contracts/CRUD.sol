@@ -51,7 +51,7 @@ contract International {
     }
     
     function queryconfirmPurchase(uint256 _num, string memory OrderId,string memory key, string[] memory values) public returns(string memory){
-         for (uint i=0; i<totalConfirmPurchases;i++){
+         for (uint i = 1; i < totalConfirmPurchases + 1 ; i++){
              if (StringTools.compareStrings(tokenIdtoconfirmPurchase[i].OrderId, OrderId)){
                 string memory KVS = keyValues(tokenIdtoconfirmPurchase[i].confirmPurchaseData);         
                 //string memory values = values(tokenIdtoconfirmPurchase[i].confirmPurchaseData);
