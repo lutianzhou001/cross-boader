@@ -1,6 +1,7 @@
 const mysql = require('mysql')
 const coMysql = require('co-mysql')
 const onChain = require('../../../../truffle/onChainFunction/onChainFunction')
+const countOccurences = (arr, value) => arr.reduce((a, v) => v === value ? a + 1 : a + 0, 0);
 
 let pool = mysql.createConnection({
   host: 'localhost',
@@ -30,12 +31,12 @@ async function saveData(response, contract_name, content, orderId) {
 
 
     connection.query('select * from ' + contract_name + ' order by id desc LIMIT 1', async function (err, data) {
-      if (data.length){
-      var result = await onChain.insertOnChain(data[0]['id'] + 1, orderId, keys, values)
-      resolve(result)
+      if (data.length) {
+        var result = await onChain.insertOnChain(data[0]['id'] + 1, orderId, contract_name, keys, values)
+        resolve(result)
       } else {
-      var result = await onChain.insertOnChain(1,orderId,keys,values)
-      resolve(result)
+        var result = await onChain.insertOnChain(1, orderId, contract_name, keys, values)
+        resolve(result)
       }
     })
   })
@@ -68,7 +69,7 @@ async function saveData(response, contract_name, content, orderId) {
             console.log(err)
           }
           console.log("success")
-          resolve({ "success": 1, "errMessage": "", "blockNumber":onChainData.blockNumber ,"txHash": onChainData.txHash })
+          resolve({ "success": 1, "errMessage": "", "blockNumber": onChainData.blockNumber, "txHash": onChainData.txHash })
         })
       }
     })
@@ -100,18 +101,25 @@ async function queryTotal() {
 
 
 async function queryData(response, contract_name, filter) {
-
-  var res = await onChain.queryOnChain(1, filter.orderId)
-  console.log("res is ..." + JSON.stringify(res))
+  var orderId
+  if (filter.orderId) {
+    orderId = filter.orderId
+  } else {
+    orderId = "NA"
+  }
+  var res = await onChain.queryOnChain(1, orderId, contract_name)
+  res = res.substring(1)
   var arr = res.split(",")
-  var obj = {}
-  for ( i = 0 ; i< arr.length / 2 ; i++ ){
-  obj[arr[i]] = arr[ i + arr.length / 2]
-}
-  content = []
-  content.push(obj)
-  response.status(200).json({"success":1, contract_name : contract_name,content:content }).end()
- 
+  var count = countOccurences(arr, "orderId")
+  var content = []
+  for (j = 0; j < count; j++) {
+    var obj = {}
+    for (i = 0 + j * arr.length / count; i < 0 + j * arr.length / count + arr.length / count / 2; i++) {
+      obj[arr[i]] = arr[i + arr.length / count / 2]
+    }
+    content.push(obj)
+  }
+  response.status(200).json({ "success": 1, contract_name: contract_name, content: content }).end()
 
   /*
   let queryData = 'SELECT * FROM ' + contract_name

@@ -6,7 +6,9 @@ library StringTools {
         return keccak256(abi.encodePacked(a)) == keccak256(abi.encodePacked(b));
     }
     
-
+    function compareStrings2(string memory a, string memory b)  internal pure returns (bool){
+        return keccak256(abi.encodePacked(a)) == keccak256(abi.encodePacked(b));
+    }
   
     function _strConcat(string memory _a, string memory _b) internal returns (string memory){
         bytes memory _ba = bytes(_a);
