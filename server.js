@@ -40,6 +40,11 @@ app.get('/api/chain/queryBalance', async function (req, res) {
     var result = await chain.queryBalance(req.body.account, res)
 })
 
+app.get('/api/chain/queryTransactionReceipt', async function(req,res){
+    console.log("queryTransactionReceipt")
+    var result = await chain.queryTransactionReceipt(req.body.txHash,res)
+})
+
 app.post('/api/models/saveData', async function (req, res) {
     console.log("saveData")
     var result = await model.batchSaveData(res, req.body.contract_name, req.body.content)

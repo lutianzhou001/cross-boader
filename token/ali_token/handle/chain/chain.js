@@ -33,10 +33,22 @@ async function queryTransaction(txHash, response) {
     })
 }
 
+
+async function queryTransactionReceipt(txHash, response) {
+    await web3.eth.getTransactionReceipt(txHash, function (err, res) {
+        if (err) {
+            response.status(200).json(err).end()
+        } else {
+            response.status(200).json(res).end()
+        }
+    })
+}
+
 module.exports = {
     queryBlock,
     queryBalance,
-    queryTransaction
+    queryTransaction,
+    queryTransactionReceipt
 }
 
 
