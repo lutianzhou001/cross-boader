@@ -119,26 +119,24 @@ async function queryData(response, contract_name, filter) {
     }
     content.push(obj)
   }
-  response.status(200).json({ "success": 1, contract_name: contract_name, content: content }).end()
+  content = await filt(content, filter)
 
-  /*
-  let queryData = 'SELECT * FROM ' + contract_name
-  connection.query(queryData, async (err, results, fields) => {
-    var obj = []
-    for (i = 0; i < results.length; i++) {
-      var flag = 1
-      for (var key in filter) {
-        if (results[i][key] != filter[key]) { flag = 0; break }
-      }
-      if (flag == 1) {
-        obj.push(results[i])
-      }
-    }
-    response.status(200).json({ "success": 1, "errMessage": "", "contract_name": contract_name, "content": obj }).end()
-  })
-  */
+  response.status(200).json({ "success": 1, contract_name: contract_name, content: content }).end()
 }
 
+async function filt(obj, filter) {
+  var result = []
+  for (i = 0; i < obj.length; i++) {
+    var flag = 1
+    for (var key in filter) {
+      if (obj[i][key] != filter[key]) { flag = 0; break }
+    }
+    if (flag == 1) {
+      result.push(obj[i])
+    }
+  }
+  return result
+}
 
 module.exports = {
   saveData,
