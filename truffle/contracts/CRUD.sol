@@ -33,9 +33,9 @@ contract International {
         return true;
     }
     
-    function queryconfirmPurchase(uint256 _num, string memory orderId, string memory contract_name, string memory key, string[] memory values) public returns(string memory){
+    function queryconfirmPurchase(uint256 total, uint256 _num, string memory orderId, string memory contract_name, string memory key, string[] memory values) public returns(string memory){
         string memory results;
-        for (uint i=1; i<totalConfirmPurchases+1;i++){
+        for (uint i=1; i< total ; i++){
              //searching contract_name,ignore which orderId is 
              if (  (StringTools.compareStrings2(orderId, "NA"))    &&   (!(StringTools.compareStrings2(contract_name, "NA"))) ){
                if (StringTools.compareStrings(tokenIdtoconfirmPurchase[i].contract_name, contract_name)){

@@ -28,7 +28,7 @@ async function insertOnChain(num, orderId, contract_name, keys, values) {
   }
 }
 
-async function queryOnChain(num, orderId, contract_name) {
+async function queryOnChain(total, num, orderId, contract_name) {
   var promiseQueryChain = new Promise(function (resolve, reject) {
     fs.readFile('./truffle/build/contracts/International.json', 'utf8', function (err, data) {
       if (err) console.log(err);
@@ -36,7 +36,7 @@ async function queryOnChain(num, orderId, contract_name) {
       var MyContract = contract(International)
       MyContract.setProvider(provider)
       MyContract.at("0xF0fF7846039857B1051f0820E25C408c8AFEAEC0").then(function (instance) {
-        return instance.queryconfirmPurchase.call(num, orderId, contract_name, "key002", ["value001", "value002"], {
+        return instance.queryconfirmPurchase.call(total, num, orderId, contract_name, "key002", ["value001", "value002"], {
           from: "0x14ca04ff85747def87d6c6c566db84cc24e4643b"
         })
       }).then(function (result) {

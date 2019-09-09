@@ -27,9 +27,6 @@ async function saveData(response, contract_name, content, orderId) {
 
 
   var promiseOnChainSave = new Promise(function (resolve, reject) {
-
-
-
     connection.query('select * from ' + contract_name + ' order by id desc LIMIT 1', async function (err, data) {
       if (data.length) {
         var result = await onChain.insertOnChain(data[0]['id'] + 1, orderId, contract_name, keys, values)
@@ -101,13 +98,27 @@ async function queryTotal() {
 
 
 async function queryData(response, contract_name, filter) {
+
+  var promiseOnChainSave = new Promise(function (resolve, reject) {
+    connection.query('select * from ' + contract_name + ' order by id desc LIMIT 1', async function (err, data) {
+      if (data.length) {
+        var result = data[0]['id'] + 2
+        resolve(result)
+      } else {
+        var result = 2
+        resolve(result)
+      }
+    })
+  })
+  var dbNumber = await promiseOnChainSave.then(function (value) { return value })
+  
   var orderId
   if (filter.orderId) {
     orderId = filter.orderId
   } else {
     orderId = "NA"
   }
-  var res = await onChain.queryOnChain(1, orderId, contract_name)
+  var res = await onChain.queryOnChain( dbNumber ,1, orderId, contract_name)
   res = res.substring(1)
   var arr = res.split(",")
   var count = countOccurences(arr, "orderId")
