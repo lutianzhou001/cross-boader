@@ -118,7 +118,7 @@ async function queryData(response, contract_name, filter) {
   } else {
     orderId = "NA"
   }
-  var res = await onChain.queryOnChain( dbNumber ,1, orderId, contract_name)
+  var res = await onChain.queryOnChain(dbNumber ,1, orderId, contract_name)
   res = res.substring(1)
   var arr = res.split(",")
   var count = countOccurences(arr, "orderId")

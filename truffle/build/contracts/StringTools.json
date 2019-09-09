@@ -1,15 +1,14 @@
 {
   "contractName": "StringTools",
   "abi": [],
-  "metadata": "{\"compiler\":{\"version\":\"0.5.0+commit.1d4f565a\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/Users/lu/Desktop/AntBlockchain/\\u8de8\\u5883\\u94fe/AntService/truffle/contracts/stringTools.sol\":\"StringTools\"},\"evmVersion\":\"byzantium\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/lu/Desktop/AntBlockchain/\\u8de8\\u5883\\u94fe/AntService/truffle/contracts/stringTools.sol\":{\"keccak256\":\"0x8f6ebdd8b21bc7811b4b497a9e51b5dcca1e6498118699e1c1dc68015cb73a70\",\"urls\":[\"bzzr://9d60b271621da37612476cf079a7728737e8752cc5ab30e2a56e6c75d187f1dd\"]}},\"version\":1}",
-  "bytecode": "0x604c602c600b82828239805160001a60731460008114601c57601e565bfe5b5030600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea165627a7a72305820b825d25f9d888f3ad4a8cc978478172394f453acaadcfaad34d86104a5d8128b0029",
-  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600080fdfea165627a7a72305820b825d25f9d888f3ad4a8cc978478172394f453acaadcfaad34d86104a5d8128b0029",
+  "bytecode": "0x604c602c600b82828239805160001a60731460008114601c57601e565bfe5b5030600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea165627a7a72305820d26324a68982a635e4145fd1036596503939f9d311e8be6c191cdd65e61427610029",
+  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600080fdfea165627a7a72305820d26324a68982a635e4145fd1036596503939f9d311e8be6c191cdd65e61427610029",
   "sourceMap": "33:1111:4:-;;132:2:-1;166:7;155:9;146:7;137:37;252:7;246:14;243:1;238:23;232:4;229:33;270:1;265:20;;;;222:63;;265:20;274:9;222:63;;298:9;295:1;288:20;328:4;319:7;311:22;352:7;343;336:24",
   "deployedSourceMap": "33:1111:4:-;;;;;;;;",
   "source": "//tools for sol(concat Strings)\n\nlibrary StringTools {\n    \n    function compareStrings(string storage a, string memory b)  internal pure returns (bool){\n        return keccak256(abi.encodePacked(a)) == keccak256(abi.encodePacked(b));\n    }\n    \n    function compareStrings2(string memory a, string memory b)  internal pure returns (bool){\n        return keccak256(abi.encodePacked(a)) == keccak256(abi.encodePacked(b));\n    }\n  \n    function _strConcat(string memory _a, string memory _b) internal returns (string memory){\n        bytes memory _ba = bytes(_a);\n        bytes memory _bb = bytes(_b);\n        bytes memory _bc = bytes(\",\");\n        string memory ret = new string(_ba.length + _bb.length + _bc.length);\n        bytes memory bret = bytes(ret);\n        uint k = 0;\n        for (uint i = 0; i < _ba.length; i++)bret[k++] = _ba[i];\n        for (uint i = 0; i < _bc.length; i++)bret[k++] = _bc[i];\n        for (uint i = 0; i < _bb.length; i++) bret[k++] = _bb[i];\n        return string(ret);\n    }  \n    \n    //function value(string memory key) public returns(string memory) {\n    //    return assetdata.data[key].value;\n    //}\n    \n}\n\n\n",
-  "sourcePath": "/Users/lu/Desktop/AntBlockchain/跨境链/AntService/truffle/contracts/stringTools.sol",
+  "sourcePath": "/root/AntService/cross-border/truffle/contracts/stringTools.sol",
   "ast": {
-    "absolutePath": "/Users/lu/Desktop/AntBlockchain/跨境链/AntService/truffle/contracts/stringTools.sol",
+    "absolutePath": "/root/AntService/cross-border/truffle/contracts/stringTools.sol",
     "exportedSymbols": {
       "StringTools": [
         890
@@ -2314,7 +2313,7 @@
     "src": "33:1114:4"
   },
   "legacyAST": {
-    "absolutePath": "/Users/lu/Desktop/AntBlockchain/跨境链/AntService/truffle/contracts/stringTools.sol",
+    "absolutePath": "/root/AntService/cross-border/truffle/contracts/stringTools.sol",
     "exportedSymbols": {
       "StringTools": [
         890
@@ -4623,8 +4622,8 @@
     "version": "0.5.0+commit.1d4f565a.Emscripten.clang"
   },
   "networks": {},
-  "schemaVersion": "3.0.13",
-  "updatedAt": "2019-08-29T06:44:59.878Z",
+  "schemaVersion": "3.0.2",
+  "updatedAt": "2019-09-09T08:43:26.270Z",
   "devdoc": {
     "methods": {}
   },

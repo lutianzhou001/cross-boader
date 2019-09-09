@@ -12,7 +12,7 @@ async function insertOnChain(num, orderId, contract_name, keys, values) {
       var International = JSON.parse(data)
       var MyContract = contract(International)
       MyContract.setProvider(provider)
-      MyContract.at("0xF0fF7846039857B1051f0820E25C408c8AFEAEC0").then(function (instance) {
+      MyContract.at("0x3279619b1093aDD181b35658D009F1612260fb70").then(function (instance) {
         return instance.insertconfirmPurchase(num, orderId, contract_name, keys, values, {
           from: "0x14ca04ff85747def87d6c6c566db84cc24e4643b"
         })
@@ -35,7 +35,7 @@ async function queryOnChain(total, num, orderId, contract_name) {
       var International = JSON.parse(data)
       var MyContract = contract(International)
       MyContract.setProvider(provider)
-      MyContract.at("0xF0fF7846039857B1051f0820E25C408c8AFEAEC0").then(function (instance) {
+      MyContract.at("0x3279619b1093aDD181b35658D009F1612260fb70").then(function (instance) {
         return instance.queryconfirmPurchase.call(total, num, orderId, contract_name, "key002", ["value001", "value002"], {
           from: "0x14ca04ff85747def87d6c6c566db84cc24e4643b"
         })
@@ -56,7 +56,7 @@ async function queryTotalonChain() {
       var International = JSON.parse(data)
       var MyContract = contract(International)
       MyContract.setProvider(provider)
-      MyContract.at("0xF0fF7846039857B1051f0820E25C408c8AFEAEC0").then(function (instance) {
+      MyContract.at("0x3279619b1093aDD181b35658D009F1612260fb70").then(function (instance) {
         return instance.queryTotalPurchase.call()
       }).then(function (result) {
         console.log(result)
